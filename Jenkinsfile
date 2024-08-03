@@ -56,7 +56,7 @@ pipeline {
                         while (retryCount < maxRetires && !serverReady){
                             def response = sh(script: 'curl -s http://127.0.0.1:8080', returnStatus : true)
 
-                            if(response === 0){
+                            if(response == 0){
                                 serverReady = true
                             }
                             else{
