@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Test Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        input, button {
+            margin: 5px;
+        }
+        .result {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Simple Test Page</h1>
+    <form id="search-form">
+        <label for="search">Search:</label>
+        <input type="text" id="search" name="search">
+        <button type="submit">Submit</button>
+    </form>
+    <div class="result" id="result"></div>
+
+    <script>
+        document.getElementById('search-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const input = document.getElementById('search').value;
+            let result = '';
+
+            // Example logic to display a result based on input
+            switch (input) {
+                case 'test1':
+                    result = 'result1';
+                    break;
+                case 'test2':
+                    result = 'result2';
+                    break;
+                default:
+                    result = 'No result';
+            }
+
+            document.getElementById('result').textContent = result;
+        });
+    </script>
+</body>
+</html>
