@@ -15,23 +15,16 @@ pipeline {
                 }
             }
 
-            // stage("Install playwright"){
-            //     steps{
-            //         sh '''
-            //         npm i -D @playwright/test
-            //         npx playwright install
-            //         npx playwright install-deps 
-            //         '''
-            //     }
-            // }
+            stage("Install playwright"){
+                steps{
+                    sh '''
+                    npm i -D @playwright/test
+                    npx playwright install
+                    npx playwright install-deps 
+                    '''
+                }
+            }
 
-            // stage("List all the test cases"){
-            //     steps{
-            //         sh '''
-            //         npx playwright test --list
-            //         '''
-            //     }
-            // }
 
             stage("Install Http Server"){
                 steps{
@@ -70,6 +63,22 @@ pipeline {
                             error "Server is not ready with ${maxRetires} seconds"
                         }
                     }
+                }
+            }
+
+             stage("List all the test cases"){
+                steps{
+                    sh '''
+                    npx playwright test --list
+                    '''
+                }
+            }
+
+            stage("Run the test case"){
+                steps{
+                    sh '''
+                    npx playwright test tests/auth.spec.js --reporter=html
+                    '''
                 }
             }
 
