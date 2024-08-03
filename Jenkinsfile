@@ -15,5 +15,23 @@ pipeline {
                 }
             }
 
+            stage("Install playwright"){
+                steps{
+                    sh '''
+                    npm i -D @playwright/test
+                    npx playwright install
+                    npx playwright install-deps 
+                    '''
+                }
+            }
+
+            stage("List all the test cases"){
+                steps{
+                    sh '''
+                    npx playwright test --list
+                    '''
+                }
+            }
+
     }
 }
