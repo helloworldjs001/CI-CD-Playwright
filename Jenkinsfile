@@ -94,55 +94,31 @@ pipeline {
 
     }
 
-    post{
-        success{
-            script{
-                emailext{
-                    to: 'helloworld.js001@gmail.com',
-                    subject: "Jenkins Build Success : ${env.JOB_NAME} ${env.BUILD_NUMBER}",
-                    body:""" The build was successful!
+   post {
+        always {
+            script {
+                emailext (
+                    to: 'test.adam011@gmail.com',
+                    subject: "Jenkins Build: ${currentBuild.currentResult} - ${env.JOB_NAME} ${env.BUILD_NUMBER}",
+                    body: """Build ${currentBuild.currentResult}!
 
-                    Build Details:
+Build details:
 
 
-                    Please find the attachments for the build.""",
-
-                    mineType : "text/html",
-                    from : "xyz@gmail.com",
-                    replyTo : "helloworld.js001@gmail.com"
-                    attachmentsPattern : "**/playwright-report/**/*",
-                    smtpHost : "${env.SMPT_HOST}",
-                    smtpPort : "${env.SMPT_PORT}",
+Please find the attached report.""",
+                    mimeType: 'text/html',
+                    from: 'your-email@gmail.com',
+                    replyTo: 'your-email@gmail.com',
+                    attachmentsPattern: '**/playwright-report/**/*',
+                    smtpHost: "${env.SMTP_HOST}",
+                    smtpPort: "${env.SMTP_PORT}",
                     authUser: credentials('smtp-username'),
                     authPassword: credentials('smtp-password'),
-                    useSsl : false,
+                    useSsl: false,
                     useTls: true
-                }
-            }
-        }
-         failure{
-            script{
-                emailext{
-                    to: 'helloworld.js001@gmail.com',
-                    subject: "Jenkins Build Failed : ${env.JOB_NAME} ${env.BUILD_NUMBER}",
-                    body:""" The build was not successful!
-
-                    Build Details:
-
-                    Please find the attachments for the build.""",
-
-                    mineType : "text/html",
-                    from : "xyz@gmail.com",
-                    replyTo : "helloworld.js001@gmail.com"
-                    attachmentsPattern : "**/playwright-report/**/*",
-                    smtpHost : "${env.SMPT_HOST}",
-                    smtpPort : "${env.SMPT_PORT}",
-                    authUser: credentials('smtp-username'),
-                    authPassword: credentials('smtp-password'),
-                    useSsl : false,
-                    useTls: true
-                }
+                )
             }
         }
     }
+
 }
