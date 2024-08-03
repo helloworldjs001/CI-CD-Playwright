@@ -1,0 +1,47 @@
+name: Playwright Test Pipeline
+
+on:
+    push:
+        branches:
+            - main
+
+jobs:
+    test:
+        runs-on: unbuntu-lastest
+
+
+        steps:
+
+            - name: Checkout code
+              uses: actions/checkout@v2
+
+            - name: Setup NodeJS
+              uses: actions/setup-node@v2
+              with:
+                  node-version: '20.x'
+
+            - name: Install dependencies
+              run: npm install
+
+            - name: Install Playwright Browsers
+              run: npx install playwright
+            
+            - name: Install Http Server
+              run: npm install -g http-server
+            
+            - name: Start Http Server
+              run: |
+                nohup http-server -p 8080 &
+
+            - name: Wait for the server to start
+              run: |
+                while ! curl -s http://127.0.0.1:8080; do
+                  echo "Waiting for server to be ready"
+                  sleep 1
+                done
+            
+            - name: Run Playwright Tests
+              run: npx playwright test tests/dataDriven.spec.js
+                
+
+            
