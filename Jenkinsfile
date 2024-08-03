@@ -78,9 +78,71 @@ pipeline {
                 steps{
                     sh '''
                     npx playwright test tests/auth.spec.js --reporter=html
+                    
+                    echo "Listing the files in the report directory"
+                    ls -al playwright-report/
                     '''
                 }
             }
 
+            stage("Archive Report"){
+                steps{
+                    archiveArtifacts artifacts: '**/playwright-report/**/*', allowEmptyArchive : true
+                }
+            }
+
+
+    }
+
+    post{
+        success{
+            script{
+                emailext{
+                    to: "helloworld.js001@gmail.com",
+                    subject: "Jenkins Build Success : ${env.JOB_NAME} ${env.BUILD_NUMBER}",
+                    body:""" The build was successful!
+
+                    Build Details:
+
+
+                    Please find the attachments for the build.""",
+
+                    mineType : "text/html",
+                    from : "xyz@gmail.com",
+                    replyTo : "helloworld.js001@gmail.com"
+                    attachmentsPattern : "**/playwright-report/**/*",
+                    smtpHost : "${env.SMPT_HOST}",
+                    smtpPort : "${env.SMPT_PORT}",
+                    authUser: credentials('smtp-username'),
+                    authPassword: credentials('smtp-password'),
+                    useSsl : false,
+                    useTls: true
+                }
+            }
+        }
+         failure{
+            script{
+                emailext{
+                    to: "helloworld.js001@gmail.com",
+                    subject: "Jenkins Build Failed : ${env.JOB_NAME} ${env.BUILD_NUMBER}",
+                    body:""" The build was not successful!
+
+                    Build Details:
+
+                    Please find the attachments for the build.""",
+
+                    mineType : "text/html",
+                    from : "xyz@gmail.com",
+                    replyTo : "helloworld.js001@gmail.com"
+                    attachmentsPattern : "**/playwright-report/**/*",
+                    smtpHost : "${env.SMPT_HOST}",
+                    smtpPort : "${env.SMPT_PORT}",
+                    authUser: credentials('smtp-username'),
+                    authPassword: credentials('smtp-password'),
+                    useSsl : false,
+                    useTls: true
+                }
+            }
+        }
     }
 }
