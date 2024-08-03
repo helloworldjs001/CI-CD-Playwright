@@ -98,7 +98,7 @@ pipeline {
         success{
             script{
                 emailext{
-                    to: "helloworld.js001@gmail.com",
+                    to: 'helloworld.js001@gmail.com',
                     subject: "Jenkins Build Success : ${env.JOB_NAME} ${env.BUILD_NUMBER}",
                     body:""" The build was successful!
 
@@ -123,7 +123,7 @@ pipeline {
          failure{
             script{
                 emailext{
-                    to: "helloworld.js001@gmail.com",
+                    to: 'helloworld.js001@gmail.com',
                     subject: "Jenkins Build Failed : ${env.JOB_NAME} ${env.BUILD_NUMBER}",
                     body:""" The build was not successful!
 
